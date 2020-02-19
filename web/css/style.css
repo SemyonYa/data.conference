@@ -1,0 +1,112 @@
+* {
+    --color-primary: rgb(29,78,137);
+    --color-primary-light: rgb(182,202,218);
+    --color-primary-dark: rgb(29,78,137);
+    
+    --color-secondary: rgb(245,184,149);
+    --color-secondary-light: rgb(244,219,179);
+    
+    --color-success: rgb(37,89,88);
+    --color-danger: rgb(119,32,47);
+    --color-grey: rgb(122,131,135);
+}
+
+footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+/*
+* IMAGE MANAGER
+*/
+.images {
+    width: 100%;
+    padding: 10px 0;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.image {
+    width: 150px;
+    height: 150px;
+    margin: 3px 3px 0 0;
+    background-size: cover;
+    background-position: center center;
+}
+
+.image-chose-btn {
+    font-size: 16px;
+    color: darkcyan;
+    cursor: pointer;
+}
+
+.remove-image {
+    color: darkred;
+    float: right;
+}
+
+
+#ConferenceModal .close {
+    color: darkred;
+    opacity: 1;
+}
+#ConferenceModal .modal-dialog {
+    height: calc(100vh - 60px);
+}
+
+#ConferenceModal .modal-content {
+    height: 100%;
+}
+
+#ConferenceModal .modal-body {
+    height: calc(100% - 60px);
+}
+
+@media (min-width: 768px) {
+    #ConferenceModal .modal-dialog {
+        width: 700px;
+        height: calc(100vh - 60px);
+        margin: 30px auto;
+    }
+}
+
+@media (min-width: 1024px) {
+    #ConferenceModal .modal-dialog {
+        width: 900px;
+        margin: 30px auto;
+    }
+}
+
+.modal-images {
+    width: 100%;
+    height: 100%;
+    padding: 10px 0;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    overflow-y: auto;
+}
+
+.modal-image {
+    width: 150px;
+    height: 150px;
+    margin: 3px 3px 0 0;
+    background-size: cover;
+    background-position: center center;
+}
+
+.ostro-image-manager-btn {
+    font-size: 32px;
+    color: darkcyan;
+}
+
+.img-preview {
+    width: 100px;
+    height: auto;
+}
