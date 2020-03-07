@@ -28,8 +28,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'organization')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'photo')->textInput() ?>
-    <img src="/web/icons/<?= $model->photo ?: 'image-outline.png' ?>" class="img-preview" id="ConferenceImgPreview" data-toggle="modal" data-target="#ConferenceModal" onclick="LoadImageManager('person-photo')" alt="Нужно выбрать другое изображение...">
+    <?= $form->field($model, 'photo')->hiddenInput() ?>
+    <img src="/web/<?= $model->photo ? 'images/' . $model->photo : 'icons/image-outline.png' ?>" class="img-preview" id="ConferenceImgPreview" data-toggle="modal" data-target="#ConferenceModal" onclick="LoadImageManager('person-photo')" alt="Нужно выбрать другое изображение...">
 
 
     <?= $form->field($model, 'is_visible')->checkbox() ?>

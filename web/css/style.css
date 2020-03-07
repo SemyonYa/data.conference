@@ -1,21 +1,37 @@
 * {
-    --color-primary: rgb(29,78,137);
-    --color-primary-light: rgb(182,202,218);
-    --color-primary-dark: rgb(29,78,137);
-    
-    --color-secondary: rgb(245,184,149);
-    --color-secondary-light: rgb(244,219,179);
-    
-    --color-success: rgb(37,89,88);
-    --color-danger: rgb(119,32,47);
-    --color-grey: rgb(122,131,135);
+    --color-primary: rgb(29, 78, 137);
+    --color-primary-light: rgb(182, 202, 218);
+    --color-primary-dark: rgb(29, 78, 137);
+
+    --color-secondary: rgb(245, 184, 149);
+    --color-secondary-light: rgb(244, 219, 179);
+
+    --color-success: rgb(37, 89, 88);
+    --color-danger: rgb(119, 32, 47);
+    --color-grey: rgb(122, 131, 135);
+}
+
+.ok-btn {
+    padding: 3px 20px;
+    border-radius: 4px;
+    background-color: var(--color-primary);
+    color: var(--color-secondary);
+    transition: .2s;
+    cursor: pointer;
+    min-width: 100px;
+    text-align: center;
+    border: solid 1px var(--color-secondary);
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, .25);
+}
+
+.ok-btn:hover {
+    color: var(--color-secondary-light);
 }
 
 footer {
     display: flex;
     justify-content: center;
     align-items: center;
-    
 }
 
 /*
@@ -54,6 +70,7 @@ footer {
     color: darkred;
     opacity: 1;
 }
+
 #ConferenceModal .modal-dialog {
     height: calc(100vh - 60px);
 }

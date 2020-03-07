@@ -43,18 +43,22 @@ AppAsset::register($this);
             <p><a href="/person/index">Участники конференции</a></p>
             <p><a href="/person-role/index">Роли участников конференции</a></p>
             <p><a href="/image/list">Менеджер картинок</a></p>
+            <p><a href="/presentation/index">Список презентаций</a></p>
+            <p><a href="/schedule/index">Расписание</a></p>
+            <p><a href="/rating/index">Рейтинги</a></p>
+            <p><a href="/photo/index">Галерея</a></p>
             <p><?php if (Yii::$app->user->isGuest) : ?>
-                <a href="/site/login" class="btn btn-primary">LOGIN</a>
-            <?php else : ?>
-                <?php
-                echo Html::beginForm(['/site/logout'], 'post');
-                echo Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn btn-link logout']
-                );
-                echo Html::endForm();
-                ?>
-            <?php endif; ?>
+                    <a href="/site/login" class="btn btn-primary">LOGIN</a>
+                <?php else : ?>
+                    <?php
+                    echo Html::beginForm(['/site/logout'], 'post');
+                    echo Html::submitButton(
+                        'Logout (' . Yii::$app->user->identity->username . ')',
+                        ['class' => 'btn btn-link logout']
+                    );
+                    echo Html::endForm();
+                    ?>
+                <?php endif; ?>
         </div>
     </div>
 
@@ -70,5 +74,21 @@ AppAsset::register($this);
 
 <!-- ConferenceModalWrap -->
 <div class="modal fade" id="ConferenceModal" tabindex="-1" role="dialog" aria-labelledby="ConferenceModalLabel" data-input-id="-">
-  Загрузка...
+    Загрузка...
+</div>
+
+<div class="modal fade" id="ConferenceCommonModal" tabindex="-1" role="dialog" aria-labelledby="ConferenceCommonModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!-- <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="ConferenceModalLabel">Менеджер изображений</h4>
+            </div> -->
+            <div class="modal-body">
+                загрузка...
+            </div>
+        </div>
+    </div>
+</div>
+
 </div>

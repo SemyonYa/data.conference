@@ -3,18 +3,17 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Person;
-use app\models\PersonRole;
-use app\models\PersonSearch;
+use app\models\Doc;
+use app\models\DocSearch;
 use app\models\Presentation;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * PersonController implements the CRUD actions for Person model.
+ * DocController implements the CRUD actions for Doc model.
  */
-class PersonController extends Controller
+class DocController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -32,12 +31,12 @@ class PersonController extends Controller
     }
 
     /**
-     * Lists all Person models.
+     * Lists all Doc models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new PersonSearch();
+        $searchModel = new DocSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -47,7 +46,7 @@ class PersonController extends Controller
     }
 
     /**
-     * Displays a single Person model.
+     * Displays a single Doc model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -60,25 +59,34 @@ class PersonController extends Controller
     }
 
     /**
-     * Creates a new Person model.
+     * Creates a new Doc model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($presentation_id)
     {
-        $model = new Person();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $presentation = Presentation::findOne($presentation_id);
+        $model = new Doc();
+        $model->is_visible = 1;
+        $model->presentation_id = $presentation_id;
+        $model->path = '-';
+        $model->extension = '-';
+        if ($model->load(Yii::$app->request->post())) {
+            $p_e = $model->upload($_FILES['Doc']);
+            $model->path = $p_e['path'];
+            $model->extension = $p_e['extension'];
+            if ($model->save()) {
+                return $this->redirect(['/presentation/view?id=' . $presentation_id]);
+            }
+            // return $this->redirect(['presentation', 'view', 'id' => $presentation_id]);
         }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        return $this->render('create', compact('model', 'presentation'));
     }
 
+
     /**
-     * Updates an existing Person model.
+     * Updates an existing Doc model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -98,7 +106,7 @@ class PersonController extends Controller
     }
 
     /**
-     * Deletes an existing Person model.
+     * Deletes an existing Doc model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -112,26 +120,18 @@ class PersonController extends Controller
     }
 
     /**
-     * Finds the Person model based on its primary key value.
+     * Finds the Doc model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Person the loaded model
+     * @return Doc the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Person::findOne($id)) !== null) {
+        if (($model = Doc::findOne($id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
-    }
-
-    public function actionSpeakerList($presentation_id) {
-        $this->layout = 'empty';
-        $speakers = PersonRole::findOne(2)->people;
-        $presentation_people_ids = Presentation::findOne($presentation_id)->getPresentationPeople()->select(['person_id'])->column();
-        // var_dump($presentation_people_ids); die;
-        return $this->render('speaker-list', compact('speakers', 'presentation_people_ids'));
     }
 }

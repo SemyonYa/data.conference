@@ -68,6 +68,10 @@ class Person extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getNameSurname() {
+        return $this->name . ' ' . $this->surname;
+    }
+
     /**
      * Gets query for [[Likes]].
      *
