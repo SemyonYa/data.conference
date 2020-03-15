@@ -14,6 +14,7 @@ use Yii;
  * @property string|null $vocation
  * @property int $person_role_id
  * @property string $organization
+ * @property string $info
  * @property string|null $photo
  * @property int|null $is_visible
  *
@@ -22,8 +23,6 @@ use Yii;
  * @property Mark[] $marks
  * @property PersonRole $personRole
  * @property PresentationPerson[] $presentationPeople
- * @property UserPerson[] $userPeople
- * @property User[] $users
  */
 class Person extends \yii\db\ActiveRecord
 {
@@ -46,6 +45,7 @@ class Person extends \yii\db\ActiveRecord
             [['surname', 'name', 'name_2'], 'string', 'max' => 30],
             [['vocation', 'organization'], 'string', 'max' => 200],
             [['photo'], 'string', 'max' => 100],
+            [['info'], 'string'],
             [['person_role_id'], 'exist', 'skipOnError' => true, 'targetClass' => PersonRole::className(), 'targetAttribute' => ['person_role_id' => 'id']],
         ];
     }
@@ -57,19 +57,24 @@ class Person extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'surname' => 'Surname',
-            'name' => 'Name',
-            'name_2' => 'Name 2',
-            'vocation' => 'Vocation',
-            'person_role_id' => 'Person Role ID',
-            'organization' => 'Organization',
-            'photo' => 'Photo',
-            'is_visible' => 'Is Visible',
+            'surname' => 'Фамилия',
+            'name' => 'Имя',
+            'name_2' => 'Отчество',
+            'vocation' => 'Должность',
+            'info' => 'Информация об участнике',
+            'person_role_id' => 'Роль на конференции',
+            'organization' => 'Наименование организации',
+            'photo' => 'Фото',
+            'is_visible' => 'Активный',
         ];
     }
 
     public function getNameSurname() {
         return $this->name . ' ' . $this->surname;
+    }
+
+    public function getSurnameName() {
+        return $this->surname . ' ' . $this->name;
     }
 
     /**
@@ -122,23 +127,4 @@ class Person extends \yii\db\ActiveRecord
         return $this->hasMany(PresentationPerson::className(), ['person_id' => 'id']);
     }
 
-    /**
-     * Gets query for [[UserPeople]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUserPeople()
-    {
-        return $this->hasMany(UserPerson::className(), ['person_id' => 'id']);
-    }
-
-    /**
-     * Gets query for [[Users]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUsers()
-    {
-        return $this->hasMany(User::className(), ['id' => 'user_id'])->viaTable('user_person', ['person_id' => 'id']);
-    }
 }

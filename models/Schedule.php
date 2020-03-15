@@ -47,12 +47,12 @@ class Schedule extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'date' => 'Date',
-            'time' => 'Time',
-            'duration' => 'Duration',
-            'place' => 'Place',
-            'is_visible' => 'Is Visible',
+            'name' => 'Наименование',
+            'date' => 'Дата',
+            'time' => 'Время',
+            'duration' => 'Продолжительность',
+            'place' => 'Место проведения',
+            'is_visible' => 'Опубликовать',
         ];
     }
 

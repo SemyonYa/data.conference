@@ -52,12 +52,12 @@ class Doc extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'description' => 'Description',
-            'path' => 'Path',
-            'is_visible' => 'Is Visible',
+            'name' => 'Наименование',
+            'description' => 'Описание',
+            'path' => 'Файл',
+            'is_visible' => 'Опубликовать',
             'extension' => 'Extension',
-            'ordering' => 'Ordering',
+            'ordering' => 'Сортировка',
             'presentation_id' => 'Presentation ID',
         ];
     }

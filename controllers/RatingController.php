@@ -12,7 +12,7 @@ use yii\filters\VerbFilter;
 /**
  * RatingController implements the CRUD actions for Rating model.
  */
-class RatingController extends Controller
+class RatingController extends AdminController
 {
     /**
      * {@inheritdoc}

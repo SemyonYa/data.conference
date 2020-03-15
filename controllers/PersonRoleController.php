@@ -12,7 +12,7 @@ use yii\filters\VerbFilter;
 /**
  * PersonRoleController implements the CRUD actions for PersonRole model.
  */
-class PersonRoleController extends Controller
+class PersonRoleController extends AdminController
 {
     /**
      * {@inheritdoc}
@@ -45,19 +45,6 @@ class PersonRoleController extends Controller
     }
 
     /**
-     * Displays a single PersonRole model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    // public function actionView($id)
-    // {
-    //     return $this->render('view', [
-    //         'model' => $this->findModel($id),
-    //     ]);
-    // }
-
-    /**
      * Creates a new PersonRole model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
@@ -65,6 +52,7 @@ class PersonRoleController extends Controller
     public function actionCreate()
     {
         $model = new PersonRole();
+        $model->is_visible = 1;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);

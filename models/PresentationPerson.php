@@ -47,7 +47,7 @@ class PresentationPerson extends \yii\db\ActiveRecord
             'id' => 'ID',
             'presentation_id' => 'Presentation ID',
             'person_id' => 'Person ID',
-            'is_coauthor' => 'Is Coauthor',
+            'is_coauthor' => 'Является соавтором',
         ];
     }
 

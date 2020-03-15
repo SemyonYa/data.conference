@@ -6,14 +6,13 @@ use Yii;
 use app\models\Doc;
 use app\models\DocSearch;
 use app\models\Presentation;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * DocController implements the CRUD actions for Doc model.
  */
-class DocController extends Controller
+class DocController extends AdminController
 {
     /**
      * {@inheritdoc}

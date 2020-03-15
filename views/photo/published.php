@@ -15,7 +15,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="galery">
         <?php foreach ($galery as $photo) : ?>
-            <p><?= $photo->name ?></p>
+            <div class="galery-item-wrap">
+                <label for="photo<?= $photo->id ?>">
+                    <div class="galery-item" style="background-image: url('<?= $photo->thumb ?>')"></div>
+                </label>
+                <a href="/photo/update?id=<?= $photo->id ?>&route=unpublished"><span class="glyphicon glyphicon-pencil"></span></a>
+                <a href="/photo/delete?id=<?= $photo->id ?>&route=unpublished"><span class="glyphicon glyphicon-remove"></span></a>
+            </div>
         <?php endforeach; ?>
     </div>
 

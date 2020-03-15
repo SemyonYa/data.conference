@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model app\models\Schedule */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Schedules', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Расписание', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -16,11 +16,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a('Редатировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Действительно удалить?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -38,5 +38,17 @@ $this->params['breadcrumbs'][] = $this->title;
             'is_visible',
         ],
     ]) ?>
+
+    <div class="schedule-presentations">
+        <a href="/schedule-presentation/create?schedule_id=<?= $model->id ?>"><span class="glyphicon glyphicon-plus-sign"></span></a>
+        <?php foreach ($model->schedulePresentations as $sp) : ?>
+            <div class="schedule-presentations-item">
+                <span><?= $sp->presentation->name ?> </span>
+                <a href="/schedule-presentation/delete?schedule_id=<?= $model->id ?>&presentation_id=<?= $sp->presentation->id ?>">
+                    <span class="glyphicon glyphicon-remove text-danger"></span>
+                </a>
+            </div>
+        <?php endforeach; ?>
+    </div>
 
 </div>

@@ -7,7 +7,7 @@ use yii\helpers\Html;
 
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Расписание', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
+// $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Редакитрование';
 ?>
 <div class="schedule-update">

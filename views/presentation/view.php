@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <hr>
     <div class="presentation-persons">
         <h3>Докладчики</h3>
-`        <ol>
+        <ol>
             <?php foreach ($model->presentationPeople as $p_person) : ?>
                 <li>
                     <?= $p_person->person->nameSurname ?>
@@ -50,8 +50,16 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="presentation-docs">
         <h3>Документы</h3>
         <ul>
-            <?php foreach ($model->docs as $doc): ?>
-                <li><a href="<?= Yii::getAlias('@web/web/docs/' . $doc->path); ?>" target="_blank" rel="noopener noreferrer" download="<?= $doc->name ?>"><?= $doc->name ?></a></li>
+            <?php foreach ($model->docs as $doc) : ?>
+                <li>
+                    <span><?= $doc->name ?></span>
+                    <a href="<?= Yii::getAlias('@web/web/docs/' . $doc->path); ?>" target="_blank" rel="noopener noreferrer" download="<?= $doc->name ?>">
+                        <span class="glyphicon glyphicon-download"></span>
+                    </a>
+                    <a href="<?= Yii::getAlias('@web/web/docs/' . $doc->path); ?>" target="_blank" rel="noopener noreferrer">
+                        <span class="glyphicon glyphicon-eye-open"></span>
+                    </a>
+                </li>
             <?php endforeach; ?>
         </ul>
         <a href="/doc/create?presentation_id=<?= $model->id ?>"><span class="glyphicon glyphicon-upload"></span></a>

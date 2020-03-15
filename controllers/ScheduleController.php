@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Schedule;
+use app\models\ScheduleDate;
 use app\models\ScheduleSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -12,7 +13,7 @@ use yii\filters\VerbFilter;
 /**
  * ScheduleController implements the CRUD actions for Schedule model.
  */
-class ScheduleController extends Controller
+class ScheduleController extends AdminController
 {
     /**
      * {@inheritdoc}
@@ -35,13 +36,18 @@ class ScheduleController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new ScheduleSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        $schedule_dates = [];
+        $dates = Schedule::find()->select(['date'])->orderBy('date ASC')->distinct()->column();
+        foreach ($dates as $date) {
+            $current_sch_date = new ScheduleDate();
+            $current_sch_date->date = $date;
+            $current_sch_date->schedules = Schedule::find()
+                ->where(['date' => $date])
+                ->orderBy('time ASC')
+                ->all();
+            $schedule_dates[] = $current_sch_date;
+        }
+        return $this->render('index', compact('schedule_dates'));
     }
 
     /**

@@ -127,3 +127,30 @@ footer {
     width: 100px;
     height: auto;
 }
+.galery {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+.galery-item-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 3px;
+}
+.galery-item {
+    width: 200px;
+    height: 200px;
+    background-size: cover;
+    background-position: center center;
+    margin: 3px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, .25);
+    padding: 5px;
+}
+
+.galery-item input[type=checkbox] {
+    zoom: 2;
+    margin: 0;
+}

@@ -17,7 +17,7 @@ use yii\widgets\ActiveForm;
     <select name="PresentationPerson[person_id]" class="form-control">
         <option disabled selected>Выберите докладчика...</option>
         <?php foreach ($people as $person) : ?>
-            <option value="<?= $person->id ?>"><?= $person->nameSurname ?></option>
+            <option value="<?= $person->id ?>"><?= $person->surnameName ?></option>
         <?php endforeach; ?>
     </select>
 

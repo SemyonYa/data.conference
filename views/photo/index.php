@@ -11,6 +11,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="photo-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
+    
     <h4>
         <a href="/photo/published" class="btn btn-primary">Опубликованные</a>
         <a href="/photo/unpublished" class="btn btn-primary">Неопубликованные</a>

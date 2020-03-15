@@ -33,8 +33,8 @@ class Mark extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'rating_id', 'description', 'jury_id', 'presentation_id'], 'required'],
-            [['id', 'rating_id', 'jury_id', 'presentation_id'], 'integer'],
+            [['rating_id', 'jury_id', 'presentation_id'], 'required'],
+            [['rating_id', 'jury_id', 'presentation_id'], 'integer'],
             [['description'], 'string', 'max' => 200],
             [['jury_id'], 'exist', 'skipOnError' => true, 'targetClass' => Person::className(), 'targetAttribute' => ['jury_id' => 'id']],
             [['presentation_id'], 'exist', 'skipOnError' => true, 'targetClass' => Presentation::className(), 'targetAttribute' => ['presentation_id' => 'id']],

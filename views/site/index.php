@@ -11,6 +11,6 @@ $this->title = 'Conference';
 
         <p class="lead">Conference App</p>
 
-        <p><a class="btn btn-lg btn-success" href="/site/login">Log In</a></p>
+        <p><a class="btn btn-lg btn-success" href="/front">В конференцию <span class="glyphicon glyphicon-menu-right"></span></a></p>
     </div>
 </div>

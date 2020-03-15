@@ -14,7 +14,7 @@ use yii\filters\VerbFilter;
 /**
  * PresentationPersonController implements the CRUD actions for PresentationPerson model.
  */
-class PresentationPersonController extends Controller
+class PresentationPersonController extends AdminController
 {
     /**
      * {@inheritdoc}
@@ -67,7 +67,7 @@ class PresentationPersonController extends Controller
     public function actionCreate($presentation_id)
     {
         $presentation = Presentation::findOne($presentation_id);
-        $people = Person::find()->all();
+        $people = Person::find()->orderBy('surname ASC')->all();
                 //   Person::find()->select(['name', 'id'])->indexBy('id')->column()
         $model = new PresentationPerson();
         $model->presentation_id = $presentation_id;

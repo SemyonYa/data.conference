@@ -9,34 +9,35 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\User;
 
 class SiteController extends Controller
 {
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout'],
-                'rules' => [
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
-        ];
-    }
+    // public function behaviors()
+    // {
+    //     return [
+    //         'access' => [
+    //             'class' => AccessControl::className(),
+    //             'only' => ['logout'],
+    //             'rules' => [
+    //                 [
+    //                     'actions' => ['logout'],
+    //                     'allow' => true,
+    //                     'roles' => ['@'],
+    //                 ],
+    //             ],
+    //         ],
+    //         'verbs' => [
+    //             'class' => VerbFilter::className(),
+    //             'actions' => [
+    //                 'logout' => ['post'],
+    //             ],
+    //         ],
+    //     ];
+    // }
 
     /**
      * {@inheritdoc}
@@ -47,10 +48,10 @@ class SiteController extends Controller
             'error' => [
                 'class' => 'yii\web\ErrorAction',
             ],
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-            ],
+            // 'captcha' => [
+            //     'class' => 'yii\captcha\CaptchaAction',
+            //     'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+            // ],
         ];
     }
 
@@ -71,19 +72,28 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
+        $errors = [];
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+        if ($model->load(Yii::$app->request->post())) {
+            $user = User::findOne(['login' => $model->username]);
+            if ($user) {
+                if (Yii::$app->security->validatePassword($model->password, $user->password_hash) && !$user->blocked) {
+                    $model->login($user);
+                    return $this->goBack();
+                } else {
+                    $errors[] = 'Некорректные данные';
+                }
+            } else {
+                $errors[] = 'Некорректные данные';
+            }
         }
 
         $model->password = '';
-        return $this->render('login', [
-            'model' => $model,
-        ]);
+        return $this->render('login', compact('model', 'errors'));
     }
 
     /**

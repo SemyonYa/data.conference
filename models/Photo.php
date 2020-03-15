@@ -14,6 +14,9 @@ use Yii;
  *
  * @property Like[] $likes
  * @property Person[] $people
+ * @property string $thumb
+ * @property string $wide
+ * @property string $origin
  */
 class Photo extends \yii\db\ActiveRecord
 {
@@ -46,8 +49,8 @@ class Photo extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
-            'title' => 'Title',
-            'is_visible' => 'Is Visible',
+            'title' => 'Подпись к фото',
+            'is_visible' => 'Опубликовать',
         ];
     }
 
@@ -69,5 +72,20 @@ class Photo extends \yii\db\ActiveRecord
     public function getPeople()
     {
         return $this->hasMany(Person::className(), ['id' => 'person_id'])->viaTable('like', ['photo_id' => 'id']);
+    }
+
+    public function getThumb()
+    {
+        return '/web/galery/' . $this->name . '-s.jpg';
+    }
+
+    public function getWide()
+    {
+        return '/web/galery/' . $this->name . '-m.jpg';
+    }
+    
+    public function getOrigin()
+    {
+        return '/web/galery/' . $this->name . '.jpg';
     }
 }

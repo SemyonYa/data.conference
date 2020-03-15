@@ -15,14 +15,19 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="galery">
         <?php foreach ($galery as $photo) : ?>
-            <p>
-                <label for="photo<?= $photo->id ?>"><?= $photo->name ?></label>
-                <input data-id="<?= $photo->id ?>" type="checkbox" class="unpublished-photo" id="photo<?= $photo->id ?>">
-            </p>
+            <div class="galery-item-wrap">
+                <label for="photo<?= $photo->id ?>">
+                    <div class="galery-item" style="background-image: url('<?= $photo->thumb ?>')">
+                        <input data-id="<?= $photo->id ?>" type="checkbox" class="unpublished-photo" checked id="photo<?= $photo->id ?>">
+                    </div>
+                </label>
+                <a href="/photo/update?id=<?= $photo->id ?>&route=unpublished"><span class="glyphicon glyphicon-pencil"></span></a>
+                <a href="/photo/delete?id=<?= $photo->id ?>&route=unpublished"><span class="glyphicon glyphicon-remove"></span></a>
+            </div>
         <?php endforeach; ?>
-        <p>
-            <button class="btn btn-success" id="publish-button" onclick="publishing()">Опубликовать</button>
-        </p>
     </div>
+    <p>
+        <button class="btn btn-success" id="publish-button" onclick="publishing()">Опубликовать</button>
+    </p>
 
 </div>

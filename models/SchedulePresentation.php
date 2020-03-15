@@ -31,6 +31,7 @@ class SchedulePresentation extends \yii\db\ActiveRecord
         return [
             [['schedule_id', 'presentation_id'], 'required'],
             [['schedule_id', 'presentation_id'], 'integer'],
+            [['schedule_id', 'presentation_id'], 'unique', 'targetAttribute' => ['schedule_id', 'presentation_id']],
             [['presentation_id'], 'exist', 'skipOnError' => true, 'targetClass' => Presentation::className(), 'targetAttribute' => ['presentation_id' => 'id']],
             [['schedule_id'], 'exist', 'skipOnError' => true, 'targetClass' => Schedule::className(), 'targetAttribute' => ['schedule_id' => 'id']],
         ];
@@ -43,7 +44,7 @@ class SchedulePresentation extends \yii\db\ActiveRecord
     {
         return [
             'schedule_id' => 'Schedule ID',
-            'presentation_id' => 'Presentation ID',
+            'presentation_id' => 'Презентация',
         ];
     }
 

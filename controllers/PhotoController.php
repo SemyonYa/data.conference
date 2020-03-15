@@ -3,13 +3,12 @@
 namespace app\controllers;
 
 use app\models\Photo;
-use PHPUnit\Util\Json;
 use yii\imagine\Image;
 use Yii;
 use yii\helpers\FileHelper;
 use yii\helpers\Json as HelpersJson;
 
-class PhotoController extends \yii\web\Controller
+class PhotoController extends AdminController
 {
     public function actionIndex()
     {
@@ -25,11 +24,11 @@ class PhotoController extends \yii\web\Controller
         $uploaded_counter = 0;
         foreach ($files as $file) {
             $name = Yii::$app->security->generateRandomString();
-            copy($file, Yii::getAlias('@webroot/galery/' . $name . '.jpg'));
             Image::resize($file, 1000, 1000)
-                ->save(Yii::getAlias('@webroot/galery/' . $name . '-m.jpg'), ['quality' => 80]);
+            ->save(Yii::getAlias('@webroot/galery/' . $name . '-m.jpg'), ['quality' => 80]);
             Image::resize($file, 400, 400)
-                ->save(Yii::getAlias('@webroot/galery/' . $name . '-s.jpg'), ['quality' => 60]);
+            ->save(Yii::getAlias('@webroot/galery/' . $name . '-s.jpg'), ['quality' => 60]);
+            rename($file, Yii::getAlias('@webroot/galery/' . $name . '.jpg'));
             $model = new Photo();
             $model->name = $name;
             $model->title = '-';
@@ -67,5 +66,25 @@ class PhotoController extends \yii\web\Controller
             $photo->save();
         }
         return HelpersJson::encode(true);
+    }
+
+    public function actionUpdate($id)
+    {
+        $model = Photo::findOne($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['published']);
+        }
+
+        return $this->render('update', compact('model'));
+    }
+
+    public function actionDelete($id, $route) {
+        $photo = Photo::findOne($id);
+        unlink(Yii::getAlias('@webroot/galery/' . $photo->name . '.jpg'));
+        unlink(Yii::getAlias('@webroot/galery/' . $photo->name . '-s.jpg'));
+        unlink(Yii::getAlias('@webroot/galery/' . $photo->name . '-m.jpg'));
+        $photo->delete();
+        return $this->redirect([$route]);
     }
 }

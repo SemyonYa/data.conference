@@ -42,8 +42,8 @@ class Rating extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'level' => 'Level',
-            'name' => 'Name',
+            'level' => 'Уровень',
+            'name' => 'Наименование (необязательно)',
         ];
     }
 

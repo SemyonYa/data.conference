@@ -14,7 +14,7 @@ use yii\filters\VerbFilter;
 /**
  * PersonController implements the CRUD actions for Person model.
  */
-class PersonController extends Controller
+class PersonController extends AdminController
 {
     /**
      * {@inheritdoc}
@@ -69,12 +69,10 @@ class PersonController extends Controller
         $model = new Person();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        return $this->render('create', compact('model'));
     }
 
     /**
@@ -89,12 +87,10 @@ class PersonController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         }
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+        return $this->render('update', compact('model'));
     }
 
     /**
@@ -131,7 +127,6 @@ class PersonController extends Controller
         $this->layout = 'empty';
         $speakers = PersonRole::findOne(2)->people;
         $presentation_people_ids = Presentation::findOne($presentation_id)->getPresentationPeople()->select(['person_id'])->column();
-        // var_dump($presentation_people_ids); die;
         return $this->render('speaker-list', compact('speakers', 'presentation_people_ids'));
     }
 }

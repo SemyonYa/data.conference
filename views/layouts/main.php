@@ -39,21 +39,23 @@ AppAsset::register($this);
 
         <!-- TEMPORARY MENU -->
         <div class="container">
-            <p><a href="/site/index">HOME</a></p>
+            <p><a href="/site/index"><strong>ГЛАВНАЯ</strong></a></p>
             <p><a href="/person/index">Участники конференции</a></p>
             <p><a href="/person-role/index">Роли участников конференции</a></p>
             <p><a href="/image/list">Менеджер картинок</a></p>
+            <p><a href="/section/index">Секции</a></p>
             <p><a href="/presentation/index">Список презентаций</a></p>
             <p><a href="/schedule/index">Расписание</a></p>
             <p><a href="/rating/index">Рейтинги</a></p>
             <p><a href="/photo/index">Галерея</a></p>
+            <p><a href="/user/index">Пользователи</a></p>
             <p><?php if (Yii::$app->user->isGuest) : ?>
                     <a href="/site/login" class="btn btn-primary">LOGIN</a>
                 <?php else : ?>
                     <?php
                     echo Html::beginForm(['/site/logout'], 'post');
                     echo Html::submitButton(
-                        'Logout (' . Yii::$app->user->identity->username . ')',
+                        'Logout (' . Yii::$app->user->identity->login . ')',
                         ['class' => 'btn btn-link logout']
                     );
                     echo Html::endForm();

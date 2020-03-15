@@ -8,6 +8,8 @@ use Yii;
  * This is the model class for table "presentation".
  *
  * @property int $id
+ * @property int $ordering
+ * @property int $section_id
  * @property string $name
  * @property string $description
  * @property string $organization
@@ -36,7 +38,7 @@ class Presentation extends \yii\db\ActiveRecord
         return [
             [['name', 'description', 'organization'], 'required'],
             [['description'], 'string'],
-            [['is_visible'], 'integer'],
+            [['is_visible', 'section_id', 'ordering'], 'integer'],
             [['name', 'organization'], 'string', 'max' => 200],
         ];
     }
@@ -48,10 +50,12 @@ class Presentation extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'description' => 'Description',
-            'organization' => 'Organization',
-            'is_visible' => 'Is Visible',
+            'name' => 'Наименование',
+            'description' => 'Аннотация',
+            'section_id' => 'Секция (не обязательно)',
+            'ordering' => 'Сортировка',
+            'organization' => 'Организация',
+            'is_visible' => 'Опубликовать',
         ];
     }
 
@@ -93,5 +97,9 @@ class Presentation extends \yii\db\ActiveRecord
     public function getSchedulePresentations()
     {
         return $this->hasMany(SchedulePresentation::className(), ['presentation_id' => 'id']);
+    }
+
+    public function getSection() {
+        return Section::findOne($this->section_id);
     }
 }

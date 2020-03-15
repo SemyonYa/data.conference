@@ -12,7 +12,7 @@ use yii\filters\VerbFilter;
 /**
  * PresentationController implements the CRUD actions for Presentation model.
  */
-class PresentationController extends Controller
+class PresentationController extends AdminController
 {
     /**
      * {@inheritdoc}

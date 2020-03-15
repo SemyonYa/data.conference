@@ -2,8 +2,6 @@
 
 namespace app\controllers;
 
-use yii\filters\AccessControl;
-use yii\web\Controller;
 use app\models\Image as MyImage;
 use Imagine\Image\Box;
 use Yii;
@@ -11,7 +9,7 @@ use yii\helpers\FileHelper;
 use yii\helpers\Json;
 use yii\imagine\Image;
 
-class ImageController extends Controller
+class ImageController extends AdminController
 {
     public $enableCsrfValidation = false;
     // public function behaviors()

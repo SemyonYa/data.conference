@@ -48,6 +48,12 @@ class Like extends \yii\db\ActiveRecord
         ];
     }
 
+    // public function __construct($photo_id, $person_id)
+    // {
+    //     $this->photo_id = $photo_id;
+    //     $this->person_id = $person_id;
+    // }
+
     /**
      * Gets query for [[Person]].
      *

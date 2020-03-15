@@ -9,6 +9,8 @@ use Yii;
  *
  * @property int $id
  * @property string $name
+ * @property integer $ordering
+ * @property integer $is_visible
  *
  * @property Person[] $people
  */
@@ -30,6 +32,7 @@ class PersonRole extends \yii\db\ActiveRecord
         return [
             [['name'], 'required'],
             [['name'], 'string', 'max' => 50],
+            [['is_visible', 'ordering'], 'integer'],
         ];
     }
 
@@ -40,7 +43,9 @@ class PersonRole extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
+            'name' => 'Наименование',
+            'is_visible' => 'Показывать',
+            'ordering' => 'Сортировка',
         ];
     }
 

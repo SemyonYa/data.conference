@@ -1,5 +1,6 @@
 <?php
 
+use app\models\Section;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -17,6 +18,13 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'description')->textarea(['rows' => 4]) ?>
 
     <?= $form->field($model, 'organization')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'section_id')->dropDownList(
+        Section::find()->select(['name', 'id'])->indexBy('id')->column(),
+        ['prompt' => 'Выбрать секцию']
+    ) ?>
+
+    <?= $form->field($model, 'ordering')->textInput(['type' => 'number']) ?>
 
     <?= $form->field($model, 'is_visible')->checkbox() ?>
 

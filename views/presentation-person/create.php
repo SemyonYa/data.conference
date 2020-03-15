@@ -7,7 +7,7 @@ use yii\helpers\Html;
 
 $this->title = 'Добаление докладчика';
 $this->params['breadcrumbs'][] = ['label' => 'Презентации', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $presentation->name;
+$this->params['breadcrumbs'][] = ['label' => $presentation->name, 'url' => '/presentation/view?id=' . $presentation->id];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="presentation-person-create">
