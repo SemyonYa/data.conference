@@ -14,6 +14,22 @@
 
     font-family: 'Cormorant Garamond', serif;
     font-size: 18px;
+
+    --flex-wrap: nowrap;
+    --front-menu-item-padding: 15px;
+    --front-menu-item-span-padding: 9px 20px 5px;
+    --front-menu-item-span-font: 16px;
+    --front-menu-item-span-basis: unset;
+}
+
+@media (max-width: 767px) {
+    * {
+        --flex-wrap: wrap;
+        --front-menu-item-padding: 5px;
+        --front-menu-item-span-padding: 3px;
+        --front-menu-item-span-font: 11px;
+        --front-menu-item-span-basis: 100%;
+    }
 }
 
 body {
@@ -49,20 +65,8 @@ a:hover {
 
 .front-content {
     width: 100%;
-    /* min-height: calc(100vh - 200px); */
     padding: 70px 10px 100px;
 }
-
-/* .front-footer {
-    width: 100%;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 7px;
-} */
 
 .front-menu {
     position: fixed;
@@ -78,10 +82,11 @@ a:hover {
 
 .front-menu-item {
     width: 25vw;
-    padding: 15px;
+    padding: var(--front-menu-item-padding);
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: var(--flex-wrap);
     border: solid 1px var(--color-primary-light);
     transition: .3s;
 }
@@ -98,11 +103,13 @@ a:hover {
 
 .front-menu-item span.glyphicon {
     font-size: 24px;
+    flex-basis: var(--front-menu-item-span-basis);
+    text-align: center;
 }
 
 .front-menu-item span:not(.glyphicon) {
-    font-size: 16px;
-    padding: 9px 20px 5px;
+    font-size: var(--front-menu-item-span-font);
+    padding: var(--front-menu-item-span-padding);
 }
 
 /*
@@ -157,11 +164,29 @@ a:hover {
 /* 
     PEOPLE 
 */
+* {
+    --people-menu-item-padding: 10px 30px;
+    --people-list-padding: 20px;
+    --person-photo-size: 300px;
+}
+
+@media (max-width: 767px) {
+    * {
+        --people-menu-item-padding: 10px;
+        --people-list-padding: 10px 0;
+    }
+}
+
+@media (max-width: 400px) {
+    * {
+        --person-photo-size: 200px;
+    }
+}
+
 .people-menu {
     width: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
 
 }
 
@@ -169,12 +194,14 @@ a:hover {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 10px 30px;
+    padding: var(--people-menu-item-padding);
     font-size: 18px;
+    text-align: center;
     border-bottom: solid 4px var(--color-lightgrey);
     margin: 0 3px;
     transition: 1s;
     cursor: pointer;
+    line-height: 1;
 }
 
 .people-menu-item-active {
@@ -190,12 +217,12 @@ a:hover {
 }
 
 .people-list {
-    width: 90%;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     transition: 1s;
-    padding: 20px;
+    padding: var(--people-list-padding);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -238,7 +265,7 @@ a:hover {
     border-radius: 3px;
     background-position: center center;
     background-repeat: no-repeat;
-    background-size: contain;
+    background-size: cover;
 }
 
 .people-list-item-info {
@@ -280,10 +307,12 @@ a:hover {
 }
 
 .person-photo {
-    width: 300px;
-    height: 300px;
+    width: var(--person-photo-size);
+    height: var(--person-photo-size);
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, .15);
     border-radius: 6px;
+    background-size: cover;
+    background-position: center center;
 }
 
 .person-wrap h4 {
@@ -307,11 +336,24 @@ a:hover {
 /*
     PRESENTSTIONS
 */
+* {
+    --front-presentations-item-align: left;
+    --front-presentations-persons-justify: flex-start;
+}
+
+@media (max-width: 767px) {
+    * {
+        --front-presentations-item-align: center;
+        --front-presentations-persons-justify: center;
+    }
+}
+
 .front-presentations-item {
     border-radius: 10px;
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, .15);
     margin: 10px;
     padding: 10px;
+    text-align: var(--front-presentations-item-align);
 }
 
 .front-presentations-item h4 {
@@ -332,6 +374,12 @@ a:hover {
     color: var(--color-primary-light);
 }
 
+.front-presentations-persons {
+    display: flex;
+    justify-content: var(--front-presentations-persons-justify);
+    flex-wrap: wrap;
+}
+
 .front-presentations-person {
     padding: 4px 10px;
     border: solid 1px var(--color-primary);
@@ -347,6 +395,15 @@ a:hover {
 */
 * {
     --front-presentation-person-width: 275px;
+    --front-presentation-wrap-wrap: nowrap;
+    --front-presentation-body-align: left;
+}
+
+@media (max-width: 767px) {
+    * {
+        --front-presentation-wrap-wrap: wrap;
+        --front-presentation-body-align: center;
+    }
 }
 
 .back-btn {
@@ -371,11 +428,12 @@ a:hover {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-
+    flex-wrap: var(--front-presentation-wrap-wrap);
 }
 
 .front-presentation-body {
     width: 100%;
+    text-align: var(--front-presentation-body-align);
 }
 
 .front-presentation-body h4 {
@@ -510,9 +568,38 @@ a:hover {
     --like-transform-y: -300px;
 }
 
+@media (max-width: 1024px) {
+    * {
+        --image-size: 220px;
+        --like-transform-y: -220px;
+    }
+}
+
+@media (max-width: 767px) {
+    * {
+        --image-size: 180px;
+        --like-transform-y: -180px;
+    }
+}
+
+@media (max-width: 450px) {
+    * {
+        --image-size: calc(50vw - 20px);
+        --like-transform-y: calc(20px - 50vw);
+
+    }
+}
+
+/* @media (max-width: 320px) {
+    * {
+        --image-size: 140px;
+
+    }
+} */
+
 .front-galery {
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     flex-wrap: wrap;
 }

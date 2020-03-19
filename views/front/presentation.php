@@ -48,7 +48,7 @@ $this->title = 'Доклады: ' . $presentation->name;
     <div class="front-presentation-persons">
         <?php foreach ($presentation->presentationPeople as $pp) : ?>
             <div class="front-presentation-person">
-                <div class="front-presentation-person-photo"></div>
+                <div class="front-presentation-person-photo" style="background-image: url('/web/images/<?= $pp->person->photo ?>')"></div>
                 <p class="front-presentation-person-fio">
                     <strong><?= $pp->person->surname ?></strong><br>
                     <?= $pp->person->name ?>

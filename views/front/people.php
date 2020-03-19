@@ -19,7 +19,7 @@ $this->title = 'Участники';
         <?php endif; ?>
         <?php foreach ($role->people as $person) : ?>
             <div class="people-list-item" data-toggle="modal" data-target="#ConferenceFrontModal" onclick="showPerson(<?= $person->id ?>)">
-                <div class="people-list-item-photo"></div>
+                <div class="people-list-item-photo" style="background-image: url('/web/images/<?= $person->photo ?>')"></div>
                 <div class="people-list-item-info">
                     <h4><?= $person->surnameName ?></h4>
                     <p><?= $person->organization ?></p>

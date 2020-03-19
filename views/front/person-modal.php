@@ -5,7 +5,7 @@
     </h3>
     <hr>
     <div class="person-photo-wrap">
-        <div class="person-photo"></div>
+        <div class="person-photo" style="background-image: url('/web/images/<?= $person->photo ?>')"></div>
     </div>
     <hr>
     <h4><?= $person->organization ?></h4>

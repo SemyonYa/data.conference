@@ -31,11 +31,11 @@ $this->title = 'Список докладов';
                 <div class="front-presentations-item">
                     <h4><?= $presentation->name ?> <a href="/front/presentation?id=<?= $presentation->id ?>">(подробнее...)</a></h4>
                     <p><strong><?= $presentation->organization ?></strong></p>
-                    <p>
+                    <div class="front-presentations-persons">
                         <?php foreach ($presentation->presentationPeople as $pp) : ?>
-                            <span class="front-presentations-person" data-toggle="modal" data-target="#ConferenceFrontModal" onclick="showPerson(<?= $pp->person->id ?>)"><?= $pp->person->surnameName . ' ' . $person->name_2 ?></span>
+                            <div class="front-presentations-person" data-toggle="modal" data-target="#ConferenceFrontModal" onclick="showPerson(<?= $pp->person->id ?>)"><?= $pp->person->surnameName . ' ' . $person->name_2 ?></div>
                         <?php endforeach; ?>
-                    </p>
+                    </div>
                     <p><?= $presentation->description ?></p>
                 </div>
             <?php endforeach; ?>
