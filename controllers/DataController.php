@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Doc;
 use yii\helpers\Json;
 use app\models\Like;
 use app\models\Mark;
@@ -9,6 +10,7 @@ use app\models\Person;
 use app\models\PersonRole;
 use app\models\Photo;
 use app\models\Presentation;
+use app\models\PresentationDoc;
 use app\models\PresentationPerson;
 use app\models\Rating;
 use app\models\Schedule;
@@ -142,6 +144,10 @@ class DataController extends \yii\web\Controller
             ->select('person_id')
             ->column();
         $presentation['people'] = Person::findAll($people_ids);
+        $presentation['docs'] = Doc::find()
+            ->where(['presentation_id' => $id])
+            ->orderBy('ordering ASC')
+            ->all();
         $ratings = Rating::find()->all();
         return Json::encode([
             'presentation' => $presentation,
