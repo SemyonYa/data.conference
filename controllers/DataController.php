@@ -134,24 +134,30 @@ class DataController extends \yii\web\Controller
 
     public function actionPresentation($id)
     {
-        // $is_jury = Yii::$app->user->identity->role_id == 3;
         $presentation = Presentation::find()
-            ->where(['id' => $id])
-            ->asArray()
-            ->one();
+        ->where(['id' => $id])
+        ->asArray()
+        ->one();
         $people_ids = PresentationPerson::find()
-            ->where(['presentation_id' => $id])
-            ->select('person_id')
-            ->column();
+        ->where(['presentation_id' => $id])
+        ->select('person_id')
+        ->column();
         $presentation['people'] = Person::findAll($people_ids);
         $presentation['docs'] = Doc::find()
-            ->where(['presentation_id' => $id])
-            ->orderBy('ordering ASC')
-            ->all();
+        ->where(['presentation_id' => $id])
+        ->orderBy('ordering ASC')
+        ->all();
+        return Json::encode($presentation);
+    }
+    
+    public function actionRatings($presentation_id)
+    {
+        // $is_jury = Yii::$app->user->identity->role_id == 3;
         $ratings = Rating::find()->all();
+        $mark = Mark::findOne($presentation_id);
         return Json::encode([
-            'presentation' => $presentation,
-            'rating' => $ratings
+            'ratings' => $ratings,
+            'mark' => $mark
         ]);
     }
 
