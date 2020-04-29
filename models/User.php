@@ -11,6 +11,8 @@ use yii\web\IdentityInterface;
  * @property int $id
  * @property string $login
  * @property string $password_hash
+ * @property string $access_token
+ * @property string $refresh_token
  * @property int $role_id
  * @property int $person_id
  * @property int $blocked
@@ -35,7 +37,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return [
             [['login', 'password_hash', 'role_id'], 'required'],
-            [['password_hash'], 'string'],
+            [['password_hash', 'access_token', 'refresh_token'], 'string'],
             [['role_id', 'blocked', 'person_id'], 'integer'],
             [['login'], 'string', 'max' => 50],
             [['login'], 'unique'],
@@ -79,6 +81,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return User::findOne($id);
     }
+    
     public static function findIdentityByAccessToken($token, $type = null)
     {
         return null;

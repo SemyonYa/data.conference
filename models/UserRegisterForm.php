@@ -16,15 +16,16 @@ class UserRegisterForm extends Model
     public $id;
     public $username;
     public $person_id;
+    public $role_id;
     public $password;
     public $confirm_password;
 
     public function rules()
     {
         return [
-            [['username', 'password', 'confirm_password'], 'required'],
+            [['username', 'password', 'confirm_password', 'role_id'], 'required'],
             [['username', 'password', 'confirm_password'], 'string'],
-            [['person_id', 'id'], 'integer'],
+            [['person_id', 'id', 'role_id'], 'integer'],
 
         ];
     }
@@ -36,6 +37,7 @@ class UserRegisterForm extends Model
             'person_id' => 'Привязать к участнику конференции (необязательно)',
             'password' => 'Пароль',
             'confirm_password' => 'Подтверждение пароля',
+            'role_id' => ''
         ];
     }
 
@@ -53,7 +55,7 @@ class UserRegisterForm extends Model
             $user = new User();
             $user->login = $this->username;
             $user->password_hash = Yii::$app->security->generatePasswordHash($this->password);
-            $user->role_id = 2;
+            $user->role_id = $this->role_id;
             $user->person_id = $this->person_id;
             $user->blocked = 0;
             if ($user->save()) {
@@ -63,34 +65,7 @@ class UserRegisterForm extends Model
                 $errors[] = 'Не удалось сохранить';
             }
         }
-        
+
         return $errors;
     }
-
-
-    /**
-     * Logs in a user using the provided username and password.
-     * @return bool whether the user is logged in successfully
-     */
-    // public function login()
-    // {
-    //     if ($this->validate()) {
-    //         return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
-    //     }
-    //     return false;
-    // }
-
-    // /**
-    //  * Finds user by [[username]]
-    //  *
-    //  * @return User|null
-    //  */
-    // public function getUser()
-    // {
-    //     if ($this->_user === false) {
-    //         $this->_user = User::findByUsername($this->username);
-    //     }
-
-    //     return $this->_user;
-    // }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use app\models\Person;
+use app\models\Role;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -31,6 +32,11 @@ $this->params['breadcrumbs'][] = 'Редактирование';
     <?= $form->field($model, 'password')->passwordInput() ?>
 
     <?= $form->field($model, 'confirm_password')->passwordInput() ?>
+
+    <?= $form->field($model, 'role_id')->dropdownList(
+        Role::find()->select(['name', 'id'])->indexBy('id')->column(),
+        ['prompt' => 'Роль пользователя']
+    ); ?>
 
     <?= $form->field($model, 'person_id')->dropdownList(
         Person::find()->select(['surname', 'id'])->indexBy('id')->column(),

@@ -17,6 +17,7 @@ class UserEditForm extends Model
     public $person_id;
     public $blocked;
     public $password;
+    public $role_id;
     public $confirm_password;
 
     public function __construct($id)
@@ -25,14 +26,15 @@ class UserEditForm extends Model
         $this->username = $user->login;
         $this->person_id = $user->person_id;
         $this->blocked = $user->blocked;
+        $this->role_id = $user->role_id;
     }
 
     public function rules()
     {
         return [
-            [['username'], 'required'],
+            [['username', 'role_id'], 'required'],
             [['username', 'password', 'confirm_password'], 'string'],
-            [['person_id', 'blocked'], 'integer'],
+            [['person_id', 'blocked', 'role_id'], 'integer'],
         ];
     }
 
@@ -44,6 +46,7 @@ class UserEditForm extends Model
             'blocked' => 'Заблокировать',
             'password' => 'Пароль',
             'confirm_password' => 'Подтверждение пароля',
+            'role_id' => ''
         ];
     }
 
@@ -66,6 +69,7 @@ class UserEditForm extends Model
             }
             $user->person_id = $this->person_id;
             $user->blocked = $this->blocked;
+            $user->role_id = $this->role_id;
             if ($user->save()) {
                 return true;
             }

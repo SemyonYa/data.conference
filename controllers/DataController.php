@@ -18,9 +18,14 @@ use app\models\ScheduleDate;
 use app\models\SchedulePresentation;
 use app\models\Section;
 use app\models\User;
+use Lcobucci\JWT\Parser;
+use Lcobucci\JWT\ValidationData;
 use Yii;
+use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
+use yii\web\UnauthorizedHttpException;
 
-class DataController extends \yii\web\Controller
+class DataController extends Controller
 {
 
     public $enableCsrfValidation = false;
@@ -40,22 +45,73 @@ class DataController extends \yii\web\Controller
                     'Access-Control-Allow-Origin' => true,
                     'Access-Control-Allow-Credentials' => true,
                     'Access-Control-Request-Method' => ['POST'],
-                    'Access-Control-Allow-Headers' => ['Origin', 'Content-Type', 'X-Auth-Token', 'Authorization', 'ngAuthorization', 'x-compress']
+                    'Access-Control-Allow-Headers' => ['Origin', 'Content-Type', 'X-Auth-Token', 'Authorization', 'ngAuthorization', 'x-compress', 'Conf-Auth']
                 ],
             ],
         ];
     }
 
-    // public function beforeAction($action)
-    // {
-    //     if (Yii::$app->user->isGuest) {
-    //         return $this->redirect('/site/login');
-    //     }
-    //     // $user_identity = Yii::$app->user->identity;
-    //     // echo '<pre>';
-    //     // var_dump($user_identity);die;
-    //     return parent::beforeAction($action);
-    // }
+    public function beforeAction($action)
+    {
+        if (!parent::beforeAction($action)) {
+            return false;
+        }
+        if (in_array($action->id, [
+            'set-current-presentation',
+            'report-data'
+        ])) {
+            $this->checkTokenComrepe();
+        } else if (in_array($action->id, [
+            'mark',
+            'set-mark'
+        ])) {
+            $this->checkTokenJury();
+        } else {
+            $this->checkToken();
+        }
+        return true;
+    }
+
+    private function checkToken()
+    {
+        $jwt = Yii::$app->request->headers->get('conf-auth');
+        $token = (new Parser())
+            ->parse($jwt);
+        $validation_data = new ValidationData();
+        if (!$token->validate($validation_data)) {
+            throw new UnauthorizedHttpException();
+        }
+    }
+
+    private function checkTokenJury()
+    {
+        $jwt = Yii::$app->request->headers->get('conf-auth');
+        $token = (new Parser())
+            ->parse($jwt);
+        $validation_data = new ValidationData();
+        if (!$token->validate($validation_data)) {
+            throw new UnauthorizedHttpException();
+        }
+        $user = User::findOne($token->getClaim('id'));
+        if ($user->role_id !== 3) {
+            throw new ForbiddenHttpException();
+        }
+    }
+
+    private function checkTokenComrepe()
+    {
+        $jwt = Yii::$app->request->headers->get('conf-auth');
+        $token = (new Parser())
+            ->parse($jwt);
+        $validation_data = new ValidationData();
+        if (!$token->validate($validation_data)) {
+            throw new UnauthorizedHttpException();
+        }
+        $user = User::findOne($token->getClaim('id'));
+        if ($user->role_id !== 4) {
+            throw new ForbiddenHttpException();
+        }
+    }
 
     public function actionPeople()
     {
@@ -99,22 +155,6 @@ class DataController extends \yii\web\Controller
         return Json::encode($schedule_dates);
     }
 
-    // public function actionSchedulePresentations($schedule_id)
-    // {
-    //     $this->layout = 'empty';
-    //     $schedule = Schedule::findOne($schedule_id);
-    //     $presentation_ids = SchedulePresentation::find()
-    //         ->where(['schedule_id' => $schedule_id])
-    //         ->select(['presentation_id'])
-    //         ->column();
-    //     $presentations = Presentation::findAll($presentation_ids);
-    //     return $this->render('schedule-presentation-modal', compact('presentations', 'schedule'));
-    //     return Json::encode([
-    //         'schedule' => $schedule,
-    //         'presentations' => $presentations
-    //     ]);
-    // }
-
     public function actionPresentations()
     {
         $sections = Section::find()->all();
@@ -135,62 +175,77 @@ class DataController extends \yii\web\Controller
     public function actionPresentation($id)
     {
         $presentation = Presentation::find()
-        ->where(['id' => $id])
-        ->asArray()
-        ->one();
+            ->where(['id' => $id])
+            ->asArray()
+            ->one();
         $people_ids = PresentationPerson::find()
-        ->where(['presentation_id' => $id])
-        ->select('person_id')
-        ->column();
+            ->where(['presentation_id' => $id])
+            ->select('person_id')
+            ->column();
         $presentation['people'] = Person::findAll($people_ids);
         $presentation['docs'] = Doc::find()
-        ->where(['presentation_id' => $id])
-        ->orderBy('ordering ASC')
-        ->all();
+            ->where(['presentation_id' => $id])
+            ->orderBy('ordering ASC')
+            ->all();
         return Json::encode($presentation);
     }
-    
-    public function actionRatings($presentation_id)
+
+    public function actionSetCurrentPresentation($id, $is_current)
+    {
+        $res = Yii::$app->db
+            ->createCommand()
+            ->update('presentation', ['is_current' => 0])
+            ->execute();
+        if ($is_current == 1) {
+            $res *= Yii::$app->db
+                ->createCommand()
+                ->update('presentation', ['is_current' => 1], 'id = ' . $id)
+                ->execute();
+        }
+        return Json::encode(true);
+        // $presentation = Presentation::findOne($id);
+    }
+
+    public function actionRatings()
+    {
+        return Json::encode(Rating::find()->all());
+    }
+
+    public function actionMark($presentation_id, $jury_id)
     {
         // $is_jury = Yii::$app->user->identity->role_id == 3;
-        $ratings = Rating::find()->all();
-        $mark = Mark::findOne($presentation_id);
-        return Json::encode([
-            'ratings' => $ratings,
-            'mark' => $mark
-        ]);
+        return Json::encode(Mark::findOne(['presentation_id' => $presentation_id, 'jury_id' => $jury_id]));
     }
 
     public function actionSetMark()
     {
-        if (Yii::$app->user->identity->role_id == 3) {
-            // return Json::encode(1);
-            $person_id = Yii::$app->user->identity->person_id;
-            $rating = Yii::$app->request->post('rating');
-            $description = Yii::$app->request->post('description') ?: ' ';
-            $presentation_id = Yii::$app->request->post('presentationId');
-            $mark = Mark::findOne(['jury_id' => $person_id, 'presentation_id' => $presentation_id]);
-            if (!$mark) $mark = new Mark();
-            $mark->rating_id = $rating;
-            $mark->description = $description;
-            $mark->jury_id = $person_id;
-            $mark->presentation_id = $presentation_id;
-            return Json::encode($mark->save());
-        }
+        $data = Yii::$app->request->post('mark');
+        $mark = Mark::findOne($data['id']);
+        if (!$mark) $mark = new Mark();
+        $mark->rating_id = $data['ratingId'];
+        $mark->description = $data['description'];
+        $mark->jury_id = $data['juryId'];
+        $mark->presentation_id = $data['presentationId'];
+        return Json::encode($mark->save());
     }
 
-    public function actionGalery()
+    public function actionGalery($person_id)
     {
-        $photos = Photo::find()->where(['is_visible' => 1])->orderBy('id DESC')->all();
-        $person_likes = Like::find()->where(['person_id' => Yii::$app->user->identity->person_id])->all();
-        $likes = [];
-        foreach ($person_likes as $p_like) {
-            $likes[$p_like->photo_id] = Like::find()->where(['photo_id' => $p_like->photo_id])->count();
+        $photos = Photo::find()
+            ->where(['is_visible' => 1])
+            ->orderBy('id DESC')
+            ->asArray()
+            ->all();
+        $person_likes = Like::find()
+            ->where(['person_id' => $person_id])
+            ->select(['photo_id'])
+            ->asArray()
+            ->column();
+        foreach ($photos as $id => $photo) {
+            $photos[$id]['count'] = Like::find()->where(['photo_id' => $photo['id']])->count(); //isset($likes[$photo['id']]) ? $likes[$photo['id']] : 0;
+            $photos[$id]['my_like'] = in_array($photo['id'], $person_likes);
         }
-        return Json::encode([
-            'photos' => $photos,
-            'likes' => $likes
-        ]);
+        return Json::encode($photos);
     }
 
     public function actionGetPhotoPath($id)
@@ -198,28 +253,52 @@ class DataController extends \yii\web\Controller
         return Json::encode(Photo::findOne($id)->wide);
     }
 
-    public function actionLike($photo_id)
+    public function actionLike()
     {
-        $person_id = Yii::$app->user->identity->person_id;
-        // return Json::encode($person_id);
-        $on = false;
-        if ($person_id) {
-            if ($like = Like::find()->where(['photo_id' => $photo_id, 'person_id' => $person_id])->one()) {
-                $like->delete();
-            } else {
-                $like = new Like();
-                $like->person_id = $person_id;
-                $like->photo_id = $photo_id;
-                $like->save();
-                $on = true;
-            }
+        $photo_id = Yii::$app->request->post('photoId');
+        $person_id = Yii::$app->request->post('personId');
+        if ($like = Like::find()->where(['photo_id' => $photo_id, 'person_id' => $person_id])->one()) {
+            return $like->delete();
+        } else {
+            $like = new Like();
+            $like->person_id = $person_id;
+            $like->photo_id = $photo_id;
+            return $like->save();
         }
+    }
 
-        $count = Like::find()->where(['photo_id' => $photo_id])->count();
-
-        return Json::encode([
-            'on' => $on,
-            'count' => $count
-        ]);
+    public function actionReportData()
+    {
+        $jury_ids = User::find()
+            ->where(['role_id' => 3, 'blocked' => 0])
+            ->andWhere(['>', 'person_id', 0])
+            ->select(['person_id'])
+            ->column();
+        $persons = Person::find()
+            ->where(['in', 'id', $jury_ids])
+            ->orderBy('surname ASC')
+            ->all();
+        $presentations = Presentation::find()
+            ->where(['is_visible' => 1])
+            ->orderBy('ordering ASC')
+            ->all();
+        $data = [];
+        foreach ($presentations as $presentation) {
+            $pms = [];
+            foreach ($persons as $person) {
+                $pms[] = [
+                    'person' => $person,
+                    'mark' => Mark::findOne(['jury_id' => $person->id, 'presentation_id' => $presentation->id])
+                ];
+            }
+            $data[] = [
+                'presentation' => $presentation,
+                'person_marks' => $pms
+            ];
+        }
+        return Json::encode($data, true);
+        // echo '<pre>';
+        // var_dump($data);
+        // die;
     }
 }
